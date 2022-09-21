@@ -1,4 +1,4 @@
-package main // import "github.com/smotes/purse/cmd/purse"
+package main
 
 import (
 	"errors"
@@ -7,10 +7,11 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"text/template"
 
-	"github.com/smotes/purse"
+	"github.com/mcl-de/purse"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -47,6 +48,7 @@ func main() {
 			log.Printf("Unable to get file %s", name)
 			continue
 		}
+
 		data[name] = strconv.Quote(s)
 	}
 
@@ -59,11 +61,10 @@ func main() {
 	cntnts := contentsHead + contentsBodyStruct + "\n" + contentsBodyVar
 
 	if out != "./" {
-		ctx.Varname = strings.Title(name)
+		ctx.Varname = cases.Title(language.English).String(name)
 		cntnts = contentsHead + contentsBodyVar
 
-		tmplCommon, err := template.New(name).Parse(
-				contentsHead + contentsBodyStruct)
+		tmplCommon, err := template.New(name).Parse(contentsHead + contentsBodyStruct)
 		handle(err)
 
 		fCommon, err := os.Create(filepath.Join(out, pack+".go"))
@@ -123,7 +124,7 @@ const (
 // GenPurse is a literal implementation of a Purse that is programmatically
 // generated from SQL file contents within a directory via go generate.
 type GenPurse struct {
-	mu sync.RWMutex
+	mu    sync.RWMutex
 	files map[string]string
 }
 
@@ -131,8 +132,9 @@ type GenPurse struct {
 // map.  If filename is not found, ok will return false.
 func (p *GenPurse) Get(filename string) (v string, ok bool) {
 	p.mu.RLock()
+	defer p.mu.RUnlock()
+
 	v, ok = p.files[filename]
-	p.mu.RUnlock()
 	return
 }
 `

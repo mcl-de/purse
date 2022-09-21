@@ -27,7 +27,7 @@ You can then import it into your Go source file(s):
 ```go
 import (
     ...
-    "github.com/smotes/purse"
+    "github.com/mcl-de/purse"
 )
 ```
 

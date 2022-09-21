@@ -1,7 +1,7 @@
 package purse
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -72,12 +72,13 @@ func New(dir string) (*MemoryPurse, error) {
 }
 
 // Get returns a SQL file's contents as a string.
-// If the file does not exist or does exists but had a read error,
+// If the file does not exist or does exist but had a read error,
 // then v == "" and ok == false.
 func (p *MemoryPurse) Get(filename string) (v string, ok bool) {
 	p.mu.RLock()
+	defer p.mu.RUnlock()
+
 	v, ok = p.files[filename]
-	p.mu.RUnlock()
 	return
 }
 
@@ -99,10 +100,15 @@ func addToPurse(purse *MemoryPurse, name, path string) error {
 		return err
 	}
 	defer f.Close()
-	b, err := ioutil.ReadAll(f)
+
+	b, err := io.ReadAll(f)
 	if err != nil {
 		return err
 	}
+
+	// Replace non linux path separators with linux path separators
+	name = strings.ReplaceAll(name, string(os.PathSeparator), "/")
+
 	purse.files[name] = string(b)
 	return nil
 }

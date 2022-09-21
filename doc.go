@@ -2,7 +2,7 @@
 //
 // To install the package, use go install:
 //
-// 		$ go get -u github.com/smotes/purse
+//	$ go get -u github.com/mcl-de/purse
 //
 // purse is also a command line tool to automate the creation of a Purse implementation given a specified
 // directory of SQL files. Given the directory of SQL files and the directory of the output file,
@@ -17,12 +17,12 @@
 //
 // To install the tool, use go install:
 //
-//		$ go get -u github.com/smotes/purse/cmd/purse
-//		$ purse [args]
+//	$ go get -u github.com/mcl-de/purse/cmd/purse
+//	$ purse [args]
 //
 // The command syntax is:
 //
-//		$ purse -in="input/dir" [-out="output/dir"] [-file="out.go"] [-name="gen"] [-pack="main"]
+//	$ purse -in="input/dir" [-out="output/dir"] [-file="out.go"] [-name="gen"] [-pack="main"]
 //
 // The input directory and output directory paths must either be absolute or relative to the
 // package using it via go generate, or relative to the current working directory where the
@@ -37,13 +37,12 @@
 // This process should generally be handled using go generate. Add a comment in one of your go source files,
 // like so:
 //
-// 		//go:generate purse -in="./fixtures" -out="."
+//	//go:generate purse -in="./fixtures" -out="."
 //
 // Then run go generate:
 //
-//  	$ go generate
+//	$ go generate
 //
 // Note that the `-pack` flag is not necessary when using go generate, as it sets the environment variable
 // automatically. Refer to the [documentation](https://golang.org/cmd/go/) on the `go` command for more information.
-//
-package purse // import "github.com/smotes/purse"
+package purse // import "github.com/mcl-de/purse"
