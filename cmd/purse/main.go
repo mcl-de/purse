@@ -110,9 +110,9 @@ const (
 	contentsBodyVar = `// {{.Varname}} is a *GenPurse.
 	var {{.Varname}} = &GenPurse{
 	files: map[string]string{
-		{{range $key, $val := .Files}}
-			"{{$key}}": {{$val}},
-		{{end}}
+		{{- range $key, $val := .Files}}
+		"{{$key}}": {{$val}},
+		{{- end}}
 	},
 }
 `
